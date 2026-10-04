@@ -1,0 +1,244 @@
+{
+  "info": {
+    "_postman_id": "3c8e9b51-7d2a-4f10-9a14-8a9d2f45c003",
+    "name": "RideLink - Ride Management Service (IT3130)",
+    "description": "Official Postman Collection for Member 3: Ride Management Service. Includes happy-path ride lifecycle requests and negative test scenarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8083"
+    },
+    {
+      "key": "passengerToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example_passenger_token"
+    },
+    {
+      "key": "driverToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example_driver_token"
+    },
+    {
+      "key": "adminToken",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example_admin_token"
+    },
+    {
+      "key": "rideId",
+      "value": "665f1a2b3c4d5e6f7a8b9c0d"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Create Ride Request (PASSENGER)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"passengerId\": \"PASS-1001\",\n  \"pickupLocation\": \"SLIIT Malabe Campus Main Gate\",\n  \"destinationLocation\": \"Colombo Fort Railway Station\",\n  \"autoAssignDriver\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/rides",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides"]
+        }
+      }
+    },
+    {
+      "name": "2. Assign Eligible Driver (PASSENGER / ADMIN)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/assign",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "assign"]
+        }
+      }
+    },
+    {
+      "name": "3. Accept Assigned Ride (DRIVER)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"driverId\": \"DRV-2001\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/accept",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "accept"]
+        }
+      }
+    },
+    {
+      "name": "4. Start Ride (DRIVER)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/start",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "start"]
+        }
+      }
+    },
+    {
+      "name": "5. Complete Ride & Calculate Final Fare (DRIVER)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/complete",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "complete"]
+        }
+      }
+    },
+    {
+      "name": "6. Get Ride By ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}"]
+        }
+      }
+    },
+    {
+      "name": "7. Get Passenger Rides",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/passenger/PASS-1001",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "passenger", "PASS-1001"]
+        }
+      }
+    },
+    {
+      "name": "8. Get Driver Rides",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/driver/DRV-2001",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "driver", "DRV-2001"]
+        }
+      }
+    },
+    {
+      "name": "9. Get All Rides (ADMIN)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{adminToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides"]
+        }
+      }
+    },
+    {
+      "name": "10. Cancel Ride (Before IN_PROGRESS)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Passenger travel plans changed\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/cancel",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "cancel"]
+        }
+      }
+    },
+    {
+      "name": "NEGATIVE 1: Blank Pickup/Destination (400 Bad Request)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"passengerId\": \"PASS-1001\",\n  \"pickupLocation\": \"\",\n  \"destinationLocation\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/rides",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides"]
+        }
+      }
+    },
+    {
+      "name": "NEGATIVE 2: Invalid Transition COMPLETED -> IN_PROGRESS (400 Bad Request)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{driverToken}}" }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/start",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "start"]
+        }
+      }
+    },
+    {
+      "name": "NEGATIVE 3: Unauthorized Role - PASSENGER calling /accept (403 Forbidden)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{passengerToken}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"driverId\": \"DRV-2001\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/rides/{{rideId}}/accept",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "rides", "{{rideId}}", "accept"]
+        }
+      }
+    }
+  ]
+}
