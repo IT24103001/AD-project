@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: account-service
+  config:
+    # Loads KEY=VALUE pairs from a local .env file (never committed). Real env variables also work.
+    import: optional:file:.env[.properties]
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/ridelink_account_db}
+      auto-index-creation: true   # creates the unique index on accounts.email
+
+server:
+  port: ${SERVER_PORT:8081}
+
+jwt:
+  secret: ${JWT_SECRET}                       # no default on purpose: app refuses to start without it
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000} # 1 hour
+
+# Optional: bootstrap the first ADMIN account (there is no public admin registration endpoint)
+admin:
+  email: ${ADMIN_EMAIL:}
+  password: ${ADMIN_PASSWORD:}
+  full-name: ${ADMIN_FULL_NAME:System Admin}
+  phone: ${ADMIN_PHONE:+94000000000}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

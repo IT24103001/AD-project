@@ -1,0 +1,17 @@
+package com.ridelink.account.dto;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.time.Instant;
+import java.util.Map;
+
+/** One consistent JSON shape for every error returned by this service. */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record ErrorResponse(
+        Instant timestamp,
+        int status,
+        String error,
+        String message,
+        String path,
+        Map<String, String> validationErrors) {
+}
