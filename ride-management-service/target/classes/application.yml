@@ -1,0 +1,32 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+spring:
+  application:
+    name: ride-management-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/ridelink_ride_db}
+      database: ridelink_ride_db
+      auto-index-creation: true
+
+ridelink:
+  services:
+    driver-service-url: ${DRIVER_SERVICE_URL:http://localhost:8082}
+    fare-service-url: ${FARE_SERVICE_URL:http://localhost:8084}
+  security:
+    jwt-secret: ${JWT_SECRET}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
